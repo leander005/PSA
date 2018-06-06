@@ -248,9 +248,9 @@ DROP TABLE IF EXISTS `supplies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `supplies` (
-  `supply_id` int(11) NOT NULL AUTO_INCREMENT,
-  `supply_type` enum('Medical','Office') DEFAULT NULL,
-  `supply_description` varchar(45) DEFAULT NULL,
+  `article_id` int(11) NOT NULL AUTO_INCREMENT,
+  `article_type` enum('Medical','Office') DEFAULT NULL,
+  `article_description` varchar(45) DEFAULT NULL,
   `brand_name` varchar(45) DEFAULT NULL,
   `unit` varchar(45) NOT NULL,
   `quantity_in_stock` int(11) DEFAULT NULL,
