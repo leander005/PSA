@@ -229,7 +229,7 @@ CREATE TABLE `supplies` (
   `dep_name` varchar(45) DEFAULT NULL,
   `soft_deleted` enum('N','Y') NOT NULL,
   `accounted_for` enum('N','Y') NOT NULL DEFAULT 'N',
-  PRIMARY KEY (`supply_id`)
+  PRIMARY KEY (`article_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
