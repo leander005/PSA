@@ -18,31 +18,6 @@ USE `inventory`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `brands`
---
-
-DROP TABLE IF EXISTS `brands`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `brands` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `active` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `brands`
---
-
-LOCK TABLES `brands` WRITE;
-/*!40000 ALTER TABLE `brands` DISABLE KEYS */;
-INSERT INTO `brands` VALUES (0,'PILOT',1),(1,'CACTUS',1),(2,'COPIER PAPER',1);
-/*!40000 ALTER TABLE `brands` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `divisions`
 --
 
@@ -50,7 +25,7 @@ DROP TABLE IF EXISTS `divisions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `divisions` (
-  `division_id` int(11) NOT NULL,
+  `division_id` int(11) NOT NULL AUTO_INCREMENT,
   `division_name` varchar(45) NOT NULL,
   `division_status` enum('Active','Inactive') NOT NULL DEFAULT 'Active',
   `soft_deleted` enum('N','Y') DEFAULT NULL,
@@ -66,6 +41,58 @@ LOCK TABLES `divisions` WRITE;
 /*!40000 ALTER TABLE `divisions` DISABLE KEYS */;
 INSERT INTO `divisions` VALUES (1,'PSA-SOCD','Active',NULL),(2,'PSA-ADMIN','Active',NULL),(3,'PSA-REG','Active',NULL);
 /*!40000 ALTER TABLE `divisions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `issued`
+--
+
+DROP TABLE IF EXISTS `issued`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `issued` (
+  `issued_id` int(11) NOT NULL AUTO_INCREMENT,
+  `quantity_issued` int(11) NOT NULL,
+  `soft_deleted` enum('N','Y') DEFAULT NULL,
+  `artic_id` int(11),
+  PRIMARY KEY (`issued_id`),
+  FOREIGN KEY (artic_id) REFERENCES supplies(article_id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `issued`
+--
+
+LOCK TABLES `issued` WRITE;
+/*!40000 ALTER TABLE `issued` DISABLE KEYS */;
+/*!40000 ALTER TABLE `issued` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `purchased`
+--
+
+DROP TABLE IF EXISTS `purchased`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `purchased` (
+  `purchased_id` int(11) NOT NULL AUTO_INCREMENT,
+  `quantity_purchased` int(11) NOT NULL,
+  `soft_deleted` enum('N','Y') DEFAULT NULL,
+  `art_id` int(11),
+  PRIMARY KEY (`purchased_id`),
+  FOREIGN KEY (art_id) REFERENCES supplies(article_id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `purchased`
+--
+
+LOCK TABLES `purchased` WRITE;
+/*!40000 ALTER TABLE `purchased` DISABLE KEYS */;
+/*!40000 ALTER TABLE `purchased` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -126,40 +153,6 @@ INSERT INTO `memo` VALUES (8,'Amy Admin','2018-05-08',' Water the plants','N','P
 UNLOCK TABLES;
 
 --
--- Table structure for table `products`
---
-
-DROP TABLE IF EXISTS `products`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `products` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `sku` varchar(255) NOT NULL,
-  `price` varchar(255) NOT NULL,
-  `qty` varchar(255) NOT NULL,
-  `image` text NOT NULL,
-  `description` text NOT NULL,
-  `attribute_value_id` text,
-  `brand_id` text NOT NULL,
-  `category_id` text NOT NULL,
-  `store_id` int(11) NOT NULL,
-  `availability` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `products`
---
-
-LOCK TABLES `products` WRITE;
-/*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (2,'G-Tec','GHE-423','15','98','assets/images/product_image/5ac043ae91b25.jpg','<p>Used for writing</p>','null','[\"5\"]','[\"4\"]',3,1);
-/*!40000 ALTER TABLE `products` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `returns`
 --
 
@@ -213,34 +206,6 @@ INSERT INTO `role` VALUES (1,'User'),(2,'Admin');
 UNLOCK TABLES;
 
 --
--- Table structure for table `suppliers`
---
-
-DROP TABLE IF EXISTS `suppliers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `suppliers` (
-  `supplier_id` int(11) NOT NULL AUTO_INCREMENT,
-  `company_name` varchar(45) NOT NULL,
-  `supplier_contact` varchar(45) NOT NULL,
-  `supplier_status` enum('Active','Inactive') NOT NULL DEFAULT 'Active',
-  `product` enum('Medical','Office') NOT NULL DEFAULT 'Office',
-  `remarks` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`supplier_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `suppliers`
---
-
-LOCK TABLES `suppliers` WRITE;
-/*!40000 ALTER TABLE `suppliers` DISABLE KEYS */;
-INSERT INTO `suppliers` VALUES (1,'AMSCO Enterprises','09182726371','Active','Office','Good provider'),(2,'EVA GOODS','09390786532','Active','Office','Always on time');
-/*!40000 ALTER TABLE `suppliers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `supplies`
 --
 
@@ -249,34 +214,22 @@ DROP TABLE IF EXISTS `supplies`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `supplies` (
   `article_id` int(11) NOT NULL AUTO_INCREMENT,
-  `article_type` enum('Medical','Office') DEFAULT NULL,
-  `article_description` varchar(45) DEFAULT NULL,
-  `brand_name` varchar(45) DEFAULT NULL,
+  `article_type` enum('Consumable','Office','Computer','Janitorial','Electrical','Vehicle','Accountable Form','General Form','Others') DEFAULT NULL,
+  `stock_code` int(11) DEFAULT NULL,
+  `article` varchar(45) DEFAULT NULL,
+  `description` varchar(45) DEFAULT NULL,
   `unit` varchar(45) NOT NULL,
   `quantity_in_stock` int(11) DEFAULT NULL,
   `unit_price` double DEFAULT NULL,
-  `unit_on_order` int(11) DEFAULT NULL,
+  `total_amount` double DEFAULT NULL,
   `reorder_level` int(11) DEFAULT NULL,
   `expiration_date` date DEFAULT NULL,
-  `good_condition` int(11) DEFAULT NULL,
-  `damaged` int(11) DEFAULT NULL,
   `total_quantity` int(11) DEFAULT NULL,
-  `total_amount` double DEFAULT NULL,
-  `delivery_id` int(11) DEFAULT NULL,
-  `suppliers_id` int(11) DEFAULT NULL,
-  `request_id` int(11) DEFAULT NULL,
-  `soft_deleted` enum('N','Y') NOT NULL,
-  `qty_issued` int(11) DEFAULT NULL,
-  `supply_remarks` varchar(100) DEFAULT NULL,
+  `article_remarks` varchar(100) DEFAULT NULL,
   `dep_name` varchar(45) DEFAULT NULL,
+  `soft_deleted` enum('N','Y') NOT NULL,
   `accounted_for` enum('N','Y') NOT NULL DEFAULT 'N',
-  PRIMARY KEY (`supply_id`),
-  KEY `supplies_delvfk_idx` (`delivery_id`),
-  KEY `supplies_suprfk_idx` (`suppliers_id`),
-  KEY `requisition_id_idx` (`request_id`),
-  CONSTRAINT `request_id` FOREIGN KEY (`request_id`) REFERENCES `request_supplies` (`requisition_id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  CONSTRAINT `supplies_delvfk` FOREIGN KEY (`delivery_id`) REFERENCES `deliveries` (`delivery_id`),
-  CONSTRAINT `supplies_suprfk` FOREIGN KEY (`suppliers_id`) REFERENCES `suppliers` (`supplier_id`)
+  PRIMARY KEY (`supply_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -286,33 +239,7 @@ CREATE TABLE `supplies` (
 
 LOCK TABLES `supplies` WRITE;
 /*!40000 ALTER TABLE `supplies` DISABLE KEYS */;
-INSERT INTO `supplies` VALUES (0,'Office','5MM PEN','PILOT ','',12,25,NULL,15,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N',NULL,NULL,NULL,'N');
 /*!40000 ALTER TABLE `supplies` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `user_group`
---
-
-DROP TABLE IF EXISTS `user_group`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user_group` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `group_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user_group`
---
-
-LOCK TABLES `user_group` WRITE;
-/*!40000 ALTER TABLE `user_group` DISABLE KEYS */;
-INSERT INTO `user_group` VALUES (1,1,1);
-/*!40000 ALTER TABLE `user_group` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -346,7 +273,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Admin','Admin','psasocd','trator','admini','09123456789','psa@gmail.com','Active','PSA-SOCD',8),(2,'User','nathan','12345','Calimlim','Nathaniel','09125413241','nathan@gmail.com','Active','PSA-ADMIN',3);
+INSERT INTO `users` VALUES (1,'Admin','Admin','psasocd','strator','admini','09123456789','psa@gmail.com','Active','PSA-SOCD',8),(2,'User','nathan','12345','Calimlim','Nathaniel','09125413241','nathan@gmail.com','Active','PSA-ADMIN',3);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
